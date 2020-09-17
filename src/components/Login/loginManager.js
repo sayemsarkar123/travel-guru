@@ -15,7 +15,7 @@ export const googleAuth = () => {
       const { displayName, email } = result.user;
       return { isSignIn: true, name: displayName, email };
     })
-    .catch(error => console.log(error))
+    .catch(error => {})
 }
 
 export const facebookAuth = () => {
@@ -25,23 +25,22 @@ export const facebookAuth = () => {
         const { displayName, email } = result.user;
         return { isSignIn: true, name: displayName, email };
       })
-      .catch(error => console.log(error))
+      .catch(error => {})
 }
 
 const updateProfile = (name) => {
   const user = firebase.auth().currentUser;
   user.updateProfile({ displayName: name })
-    .then(result => console.log(result))
-    .catch(error => console.log(error))
+    .then(result => {})
+    .catch(error => {})
 }
 
 export const userSignUp = (name, email, password) => {
   firebase.auth().createUserWithEmailAndPassword(email, password)
   .then(result => {
     updateProfile(name);
-    console.log(result);
   })
-  .catch(error => console.log(error))
+  .catch(error => {})
 }
 
 export const userSignIn = (email, password) => {
@@ -50,5 +49,5 @@ export const userSignIn = (email, password) => {
     const { displayName, email } = result.user;
     return { isSignIn: true, name: displayName, email };
   })
-  .catch(error => console.log(error))
+  .catch(error => {})
 }
