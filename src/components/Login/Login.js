@@ -3,16 +3,13 @@ import { Col, Container, Image, Row } from 'react-bootstrap';
 import Header from '../Header/Header';
 import SignIn from '../SignIn/SignIn';
 import SignUp from '../SignUp/SignUp';
-import * as firebase from "firebase/app";
-import "firebase/auth";
 import './Login.css';
-import firebaseConfig from './firebaseConfig';
 import { LoginContext } from '../../App';
 import { useHistory, useLocation } from 'react-router-dom';
-
-firebase.initializeApp(firebaseConfig);
+import { facebookAuth, googleAuth, initializeFirebaseApp, userSignIn, userSignUp } from './loginManager';
 
 const Login = () => {
+  initializeFirebaseApp();
   const [loginData, setLoginData] = useContext(LoginContext);
   const history = useHistory();
   const location = useLocation();
@@ -20,55 +17,25 @@ const Login = () => {
   const [user, setUser] = useState({isSignIn: false, fname: '', lname: '', isEmailValid: true, email: '', isPasswordValid: true, isSecondPasswordValid: true, password: ''});
   const [newUser, setNewUser] = useState(false);
   const formLineStyle = { width: '35%', height: '1px', backgroundColor: '#ccc' };
-  const updateProfile = (name) => {
-    const user = firebase.auth().currentUser;
-    user.updateProfile({ displayName: name })
-      .then(result => console.log(result))
-      .catch(error => console.log(error))
+
+  const updateUserData = (userData) => {
+    setUser(userData);
+    setLoginData({...loginData, ...userData});
+    history.replace(from);
   }
+
   const googleSignIn = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider)
-      .then(result => {
-        const { displayName, email } = result.user;
-        const userData = { isSignIn: true, name: displayName, email };
-        setUser(userData);
-        setLoginData({...loginData, ...userData});
-        history.replace(from);
-      })
-      .catch(error => console.log(error))
+    googleAuth().then(result => updateUserData(result));
   }
   const facebookSignIn = () => {
-    const provider = new firebase.auth.FacebookAuthProvider();
-    firebase.auth().signInWithPopup(provider)
-      .then(result => {
-        const { displayName, email } = result.user;
-        const userData = { isSignIn: true, name: displayName, email };
-        setUser(userData);
-        setLoginData({...loginData, ...userData});
-        history.replace(from);
-      })
-      .catch(error => console.log(error))
+    facebookAuth().then(result => updateUserData(result));
   }
   const submitForm = (e) => {
     if (newUser && user.fname && user.lname && user.email && user.password && user.secondPassword) {
-      firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-        .then(result => {
-          updateProfile(`${user.fname} ${user.lname}`);
-          console.log(result);
-        })
-        .catch(error => console.log(error))
+      userSignUp(`${user.fname} ${user.lname}`, user.email, user.password);
     }
     if (!newUser && user.email && user.password) {
-      firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-        .then(result => {
-          const { displayName, email } = result.user;
-          const userData = { isSignIn: true, name: displayName, email };
-          setUser(userData);
-          setLoginData({...loginData, ...userData});
-          history.replace(from);
-        })
-        .catch(error => console.log(error))
+      userSignIn(user.email, user.password).then(result => updateUserData(result));
     }
     e.preventDefault();
   }
