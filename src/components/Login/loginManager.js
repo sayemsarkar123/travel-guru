@@ -15,7 +15,7 @@ export const googleAuth = () => {
       const { displayName, email } = result.user;
       return { isSignIn: true, name: displayName, email };
     })
-    .catch(error => {})
+    .catch(() => {})
 }
 
 export const facebookAuth = () => {
@@ -25,29 +25,32 @@ export const facebookAuth = () => {
         const { displayName, email } = result.user;
         return { isSignIn: true, name: displayName, email };
       })
-      .catch(error => {})
+      .catch(() => {})
 }
 
 const updateProfile = (name) => {
   const user = firebase.auth().currentUser;
   user.updateProfile({ displayName: name })
-    .then(result => {})
-    .catch(error => {})
+    .then(() => {})
+    .catch(() => {})
 }
 
 export const userSignUp = (name, email, password) => {
-  firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then(result => {
-    updateProfile(name);
-  })
-  .catch(error => {})
+  return firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      updateProfile(name);
+      return 'Account created successfully';
+    })
+    .catch(() => 'Account creation failed')
 }
 
 export const userSignIn = (email, password) => {
   return firebase.auth().signInWithEmailAndPassword(email, password)
-  .then(result => {
-    const { displayName, email } = result.user;
-    return { isSignIn: true, name: displayName, email };
-  })
-  .catch(error => {})
+    .then(result => {
+      const { displayName, email } = result.user;
+      return { isSignIn: true, name: displayName, email };
+    })
+    .catch(() => {
+      return { error: 'Incorrect username or password.' };
+    });
 }

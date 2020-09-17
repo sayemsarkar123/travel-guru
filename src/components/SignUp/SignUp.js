@@ -35,6 +35,9 @@ const SignUp = ({ newUser, setNewUser, submitForm, formValidation, user }) => {
             Create an account
         </Button>
       </Form>
+      {
+        user.isSignUp && <h5 className={user.isSignUp === 'Account creation failed' ? 'text-danger text-center my-3' : 'text-success text-center my-3'}>{user.isSignUp}</h5>
+      }
       <h5 className="text-center">Already have an account? <span onClick={() => setNewUser(!newUser)} className="text-warning" style={{cursor: 'pointer'}}>Login</span></h5>
     </div>
   );

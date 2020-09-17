@@ -14,7 +14,7 @@ const Login = () => {
   const history = useHistory();
   const location = useLocation();
   const { from } = location.state || { from: { pathname: "/" } };
-  const [user, setUser] = useState({isSignIn: false, fname: '', lname: '', isEmailValid: true, email: '', isPasswordValid: true, isSecondPasswordValid: true, password: ''});
+  const [user, setUser] = useState({isSignIn: false, isSignUp: false, fname: '', lname: '', isEmailValid: true, email: '', isPasswordValid: true, isSecondPasswordValid: true, password: ''});
   const [newUser, setNewUser] = useState(false);
   const formLineStyle = { width: '35%', height: '1px', backgroundColor: '#ccc' };
 
@@ -31,11 +31,11 @@ const Login = () => {
     facebookAuth().then(result => updateUserData(result));
   }
   const submitForm = (e) => {
-    if (newUser && user.fname && user.lname && user.email && user.password && user.secondPassword) {
-      userSignUp(`${user.fname} ${user.lname}`, user.email, user.password);
+    if (newUser && user.fname && user.lname && user.email && user.password && user.secondPassword && user.isSecondPasswordValid) {
+      userSignUp(`${user.fname} ${user.lname}`, user.email, user.password).then(result => setUser({ ...user, isSignUp: result, isSignIn: false }));
     }
     if (!newUser && user.email && user.password) {
-      userSignIn(user.email, user.password).then(result => updateUserData(result));
+      userSignIn(user.email, user.password).then(result => result.error ? setUser({ ...user, isSignIn: result.error, isSignUp: false }) : updateUserData(result));
     }
     e.preventDefault();
   }
