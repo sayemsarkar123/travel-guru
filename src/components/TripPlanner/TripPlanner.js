@@ -12,7 +12,7 @@ const TripPlanner = () => {
     setPlace(touristPlaces.find(touristPlace => touristPlace.id === +placeId));
   }, []);
   const getDateValue = () => {
-    return `${new Date().getFullYear()}-${new Date().getMonth() < 10 ? '0' + new Date().getMonth() : new Date().getMonth()}-${new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()}`
+    return `${new Date().getFullYear()}-${new Date().getMonth() < 10 ? `0${new Date().getMonth() + 1}` : new Date().getMonth() + 1}-${new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()}`
   }
   const formInputStyle = { backgroundColor: '#F2F2F2' }
   const formLabelStyle = { color: '#B1B1B1' };
@@ -51,7 +51,7 @@ const TripPlanner = () => {
                     <Col>
                     <Form.Group>
                     <Form.Label style={formLabelStyle}>To</Form.Label>
-                    <Form.Control className="py-4" style={formInputStyle} type="date"/>
+                    <Form.Control className="py-4" style={formInputStyle} type="date" defaultValue={getDateValue()}/>
                   </Form.Group>
                     </Col>
                   </Form.Row>
