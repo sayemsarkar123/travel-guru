@@ -54,3 +54,10 @@ export const userSignIn = (email, password) => {
       return { error: 'Incorrect username or password.' };
     });
 }
+
+export const resetPassword = (email) => {
+  const auth = firebase.auth();
+  auth.sendPasswordResetEmail(email)
+    .then(() => {})
+    .catch(() => {})
+}

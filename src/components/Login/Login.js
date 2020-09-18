@@ -6,7 +6,7 @@ import SignUp from '../SignUp/SignUp';
 import './Login.css';
 import { LoginContext } from '../../App';
 import { useHistory, useLocation } from 'react-router-dom';
-import { facebookAuth, googleAuth, initializeFirebaseApp, userSignIn, userSignUp } from './loginManager';
+import { facebookAuth, googleAuth, initializeFirebaseApp, resetPassword, userSignIn, userSignUp } from './loginManager';
 
 const Login = () => {
   initializeFirebaseApp();
@@ -16,6 +16,7 @@ const Login = () => {
   const { from } = location.state || { from: { pathname: "/" } };
   const [user, setUser] = useState({isSignIn: false, isSignUp: false, fname: '', lname: '', isEmailValid: true, email: '', isPasswordValid: true, isSecondPasswordValid: true, password: ''});
   const [newUser, setNewUser] = useState(false);
+  const [forgetPassword, setForgetPassword] = useState(false);
   const formLineStyle = { width: '35%', height: '1px', backgroundColor: '#ccc' };
 
   const updateUserData = (userData) => {
@@ -36,6 +37,9 @@ const Login = () => {
     }
     if (!newUser && user.email && user.password) {
       userSignIn(user.email, user.password).then(result => result.error ? setUser({ ...user, isSignIn: result.error, isSignUp: false }) : updateUserData(result));
+    }
+    if (forgetPassword && user.email) {
+      resetPassword(user.email)
     }
     e.preventDefault();
   }
@@ -73,7 +77,7 @@ const Login = () => {
         </Col>
         <Col md={6} className="mx-auto">
 
-          {newUser ? <SignUp user={user} submitForm={submitForm} formValidation={formValidation} newUser={newUser} setNewUser={setNewUser}></SignUp> : <SignIn user={user} submitForm={submitForm} formValidation={formValidation} newUser={newUser} setNewUser={setNewUser}></SignIn>}
+          {newUser ? <SignUp user={user} submitForm={submitForm} formValidation={formValidation} newUser={newUser} setNewUser={setNewUser}></SignUp> : <SignIn user={user} submitForm={submitForm} formValidation={formValidation} newUser={newUser} setNewUser={setNewUser} forgetPassword={forgetPassword} setForgetPassword={setForgetPassword}></SignIn>}
 
           <div className="d-flex align-items-center justify-content-center mt-3">
             <div style={formLineStyle}></div>

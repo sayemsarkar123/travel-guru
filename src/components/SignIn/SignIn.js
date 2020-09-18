@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import './SignIn.css';
 
-const SignIn = ({ newUser, setNewUser, submitForm, formValidation, user }) => {
+const SignIn = ({ newUser, setNewUser, submitForm, formValidation, user, forgetPassword, setForgetPassword }) => {
   return (
 <div className="p-5 rounded" style={{border: '2px solid #ccc'}}>
       <h5 className="mb-3">Login</h5>
@@ -13,14 +13,17 @@ const SignIn = ({ newUser, setNewUser, submitForm, formValidation, user }) => {
             {user.isEmailValid || 'Enter a valid email'}
           </Form.Text>
         </Form.Group>
-        <Form.Group>
+        {forgetPassword || <Form.Group>
           <Form.Control onChange={formValidation} type="password" name="password" placeholder="Password" className="border-left-0 border-right-0 border-top-0" />
           <Form.Text className="text-danger pl-2">
             {user.isPasswordValid || 'Enter a valid password'}
           </Form.Text>
-        </Form.Group>
+        </Form.Group>}
+        <div className="d-flex">
+          <span onClick={() => setForgetPassword(!forgetPassword)} className="text-warning ml-auto" style={{cursor: 'pointer'}}>Forgot Password</span>
+        </div>
         <Button variant="warning" type="submit" className="d-block w-100 text-center my-4">
-            Login
+          {forgetPassword ? "Request password reset" : "Login"}
         </Button>
       </Form>
       {
