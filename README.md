@@ -4,4 +4,4 @@ ___
 
 ##### Technology used : React.js, React Bootstrap, Firebase Authentication
 \
-[Website](https://travel-guru-2020.web.app/) | [Resume](https://drive.google.com/file/d/1glAZTxGi0fT7dcWymtLVImHUR6ZkIAHD/view?usp=sharing)
+[Website](https://travel-guru-2020.web.app/) / [Resume](https://drive.google.com/file/d/1glAZTxGi0fT7dcWymtLVImHUR6ZkIAHD/view?usp=sharing)
